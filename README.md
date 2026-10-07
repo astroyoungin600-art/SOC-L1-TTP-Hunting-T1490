@@ -1,11 +1,18 @@
-# SOC L1 - TTP Hunting - T1490
+# SOC L1 - TTP Hunting at Pyramid of Pain Top
 
-Hunts behaviors, not hashes. Pyramid of Pain: TTPs > Tools > IOCs
+**Hunts behaviors, not hashes.**
 
-**Finding:** ANY.RUN analysis caught `vssadmin delete shadows /all /quiet` (T1490) BEFORE T1486 encryption.
+## 🚨 Key Finding - ANY.RUN Analysis
+Detected `vssadmin delete shadows /all /quiet` (MITRE T1490 - Inhibit System Recovery) **BEFORE** T1486 Data Encrypted for Impact.
 
-**Impact:** Detecting T1490 stops all ransomware families, not just one hash.
+- If you block T1490, you stop ALL ransomware families (LockBit, BlackCat, Conti), not just one hash.
+- IOCs change, TTPs don't - Pyramid of Pain.
 
-**KQL:** DeviceProcessEvents | where ProcessCommandLine has_all("vssadmin","delete","shadows")
+## 🔍 KQL Detections for Microsoft Sentinel
 
-Portfolio: github.com/astroyoungin600-art | TryHackMe: astroyoungin600 | Live: AstroJobSA.com (684 users)
+**T1490.kql** - Shadow copy deletion
+```kql
+DeviceProcessEvents
+| where ProcessCommandLine has_all("vssadmin","delete","shadows")
+| project Timestamp, DeviceName, InitiatingProcessFileName, ProcessCommandLine
+| extend MITRE="T1490", Tactic="Impact", Action="Isolate Device"
