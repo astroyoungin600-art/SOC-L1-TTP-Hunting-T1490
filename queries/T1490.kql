@@ -1,0 +1,1 @@
+DeviceProcessEvents | where ProcessCommandLine has_all("vssadmin","delete","shadows") | extend MITRE="T1490"

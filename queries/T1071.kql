@@ -1,0 +1,1 @@
+DeviceNetworkEvents | summarize c=count() by DeviceName, RemoteIP | where c>50

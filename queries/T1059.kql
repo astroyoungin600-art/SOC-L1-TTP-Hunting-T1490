@@ -1,0 +1,1 @@
+DeviceProcessEvents | where InitiatingProcessFileName in~ ("outlook.exe","winword.exe") and FileName in~ ("cmd.exe","powershell.exe")
